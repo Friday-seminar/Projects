@@ -13,9 +13,8 @@ H(x,y,z,t,p)  =  {
     /* next line reduces x,y,z,t modulo p */
     x *= Mod(1,p); y *= Mod(1,p); z *= Mod(1,p); t *= Mod(1,p);
 R = 2 - nr(substvec(FT,[X,Y,Z,T],[x,y,z,t]));  
-R -= (x==y);
-/* R -=  p * (x==y) *  ((x==0)+(x==1)+(x==t)); */
-R += p * (x!=0)*(x!=1)*(x!=t) * ( (z==0)*(x*y==t) + (z==1)*((1-x)*y==t-x) + (z==t)*(y*(t-x)==t*(1-x)) ); 
+R -= 1 * (x==y); 
+R += p * (x!=0)*(x!=1)*(x!=t) * (-(x==y) + (z==0)*(x*y==t) + (z==1)*((1-x)*y==t-x) + (z==t)*(y*(t-x)==t*(1-x)) ); 
 R}
 
 /* for x=1,...,p matrix M(t,p)[x] is Hecke operator from MK */
@@ -23,6 +22,4 @@ M(t,p) = vector(p,x,matrix(p,p,y,z,H(x,y,z,t,p)));
 
 W = M(2,11);
 /* check that all matrices  W[n] and W[m] commpute modulo p */
-matrix(11,11,n,m,C(W[n],W[m]) %11 != 0) == 0
-matrix(11,11,n,m,norml2(C(W[n],W[m])/11))
-C(W[5],W[8])/11
+matrix(11,11,n,m,C(W[n],W[m]) != 0) == 0

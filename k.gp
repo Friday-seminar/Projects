@@ -11,10 +11,14 @@ FT == (X*Y+Y*Z+X*Z-T)^2 + 4 *X*Y*Z * (1+T-(X+Y+Z)) /* check it is indeed MK poly
    x,y,z,t - points on affine line (shall be projective?) */
 H(x,y,z,t,p)  =  {
     /* next line reduces x,y,z,t modulo p */
-    x *= Mod(1,p); y *= Mod(1,p); z *= Mod(1,p); t*=Mod(1,p);
+    x *= Mod(1,p); y *= Mod(1,p); z *= Mod(1,p); t *= Mod(1,p);
 2 - nr(substvec(FT,[X,Y,Z,T],[x,y,z,t]))  \
-		-  (x==y) * (1 + p*((x==0)+(x==1)+(x==t))) \
-		+  p*(x!=0)*(x!=1)*(x!=t) * ( (z==0)*(x*y==t) + (z==1)*((1-x)*y==t-x) + (z==t)*(y*(t-x)==t*(1-x)) ) }
+	/*	-  (x==y) * (1 + p*((x==0)+(x==1)+(x==t))) \    */
+		-  (x==y)   \
+/*		-  p * (x==y) *  ((x==0)+(x==1)+(x==t)) \
+		+  p*(x!=0)*(x!=1)*(x!=t) * ( (z==0)*(x*y==t) + (z==1)*((1-x)*y==t-x) + (z==t)*(y*(t-x)==t*(1-x)) ) 
+*/
+}
 
 /* for x=1,...,p matrix M(t,p)[x] is Hecke operator from MK */
 M(t,p) = vector(p,x,matrix(p,p,y,z,H(x,y,z,t,p)));

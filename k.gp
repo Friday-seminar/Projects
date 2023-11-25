@@ -20,6 +20,18 @@ R}
 /* for x=1,...,p matrix M(t,p)[x] is Hecke operator from MK */
 M(t,p) = vector(p,x,matrix(p,p,y,z,H(x,y,z,t,p)));
 
-W = M(2,11);
-/* check that all matrices  W[n] and W[m] commpute modulo p */
-matrix(11,11,n,m,C(W[n],W[m]) != 0) == 0
+checks(t,p) = {
+W = M(t,p);
+return([
+/* check that all matrices  W[n] and W[m] commute modulo p */
+matrix(p,p,n,m,C(W[n],W[m]) != 0) == 0,
+/* check that sum of matrices is minus identity */
+sum(n=1,p,W[n]) == -1,
+/* check that eigenvalues of matrices are bounded by 2 * sqrt(p) */
+vecmax(vector(p,n,vecmax(abs(polroots(charpoly(W[n])))))) < 2*sqrt(p)
+/* I omitted check that they are real */
+]);
+}
+
+/* For t=0 and t=1 checks fail, for t different from 0,1 and infty it works */
+forprime(p=2,17,for(t=2,p-1,print([p,t],checks(t,p))))
